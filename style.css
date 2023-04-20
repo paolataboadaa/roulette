@@ -1,0 +1,132 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    height: 100vh;
+}
+
+/* Segunda ruleta */
+@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
+
+.ruleta_container {
+    background: #CD1D1D;
+    border: 4px solid #fff;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    color: #fff;
+    font-family: 'Rubik', sans-serif;
+}
+
+.ruleta_title {
+    margin-bottom: 1.5rem;
+}
+
+.ruleta_box {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+#ruleta {
+    /* border: 1px solid red; */
+    width: 65%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#ruleta_result {
+    /* border: 1px solid blue; */
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    /* padding-left: 2rem; */
+    gap: 10px;
+}
+
+#ruleta_result h1 {
+    font-size: calc(1rem + 1.2vw);
+    text-transform: uppercase;
+}
+#ruleta_result h2 {
+    font-size: calc(1rem + 1vw);
+    text-transform: uppercase;
+    white-space: pre;
+}
+
+/* @media screen and (max-width: 720px) {
+    .ruleta_box {
+        flex-direction: column;
+    }
+} */
+
+body {
+    margin: 0;
+}
+
+#balloon-container {
+    height: 100vh;
+    padding: 1em;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    transition: opacity 500ms;
+}
+
+.balloon {
+    height: 125px;
+    width: 105px;
+    border-radius: 75% 75% 70% 70%;
+    position: relative;
+}
+
+.balloon:before {
+    /* palito */
+    content: "";
+    height: 75px;
+    width: 1px;
+    padding: 1px;
+    background-color: #FDFD96;
+    display: block;
+    position: absolute;
+    top: 125px;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.balloon:after {
+    /* nudito */
+    content: "▲";
+    text-align: center;
+    display: block;
+    position: absolute;
+    color: inherit;
+    top: 120px;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+@keyframes float {
+    from {
+        transform: translateY(100vh);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateY(-300vh);
+        opacity: 0;
+    }
+}
