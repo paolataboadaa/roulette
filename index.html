@@ -11,7 +11,7 @@
 
 <body>
 
-    <div style="position: absolute">
+    <div style="position: absolute; z-index: 1;">
         <div id="balloon-container"></div>
     </div>
     <div class="ruleta_container">
@@ -169,7 +169,7 @@
 
         // 2. Agrega el contenido (piezas) de la ruleta
         const contentRuleta = svgRuleta.append("g").attr('id', 'content')
-            .attr("transform", "translate(" + (wRuleta / 2 + 10) + "," + (hRuleta / 2) + ")")
+            .attr("transform", "translate(" + (wRuleta / 2) + "," + (hRuleta / 2) + ")")
         const visRuleta = contentRuleta.append("g").attr('id', 'vis');
 
         // 3. Agrega el gráfico de torta
@@ -180,7 +180,7 @@
         arcsRuleta.append("path").attr("fill", (d, i) => color(i)).attr("d", (d) => arcRuleta(d))
 
         // 4. Borde blanco de la ruleta
-        const borderWidth = whScreen * 0.015;
+        const borderWidth = whScreen * 0.025;
         const outerRadiusRuleta = Math.min(wRuleta, hRuleta) / 2 - borderWidth;
         const arcBorderRuleta = d3.svg.arc().innerRadius(outerRadiusRuleta).outerRadius(outerRadiusRuleta + borderWidth);
         arcsRuleta.append("path").attr("fill", "#FFBE0B").attr("d", arcBorderRuleta);
@@ -190,7 +190,7 @@
             d.innerRadius = 0;
             d.outerRadius = rRuleta;
             d.angle = (d.startAngle + d.endAngle) / 2;
-            return "rotate(" + ((d.angle * 180 / Math.PI - 90) + 2) + ")translate(" + (d.outerRadius - 30) + ")";
+            return "rotate(" + ((d.angle * 180 / Math.PI - 90) + 2) + ")translate(" + (d.outerRadius - (borderWidth + 20)) + ")";
         })
             .attr("text-anchor", "end")
             .text((d, i) => data[i].local)
@@ -221,6 +221,7 @@
         let elPicked = 100000;
         let rotationRuleta = 0
         const spinRuleta = (d) => {
+            d3.select("#ruleta").style({ "transform": "scale(1)" })
             d3.select("#image").remove(); // Elimina la imagen del botón Spin
             d3.select("#text").style({ "fill": "black" }); // Muestra el texto del botón Spin
 
@@ -230,14 +231,16 @@
             elPicked = Math.round(data.length - (rotationRuleta % 360) / ps);
             elPicked = elPicked >= data.length ? (elPicked % data.length) : elPicked;
             rotationRuleta += 90 - Math.round(ps / 2);
-            visRuleta.transition().duration(3000).attrTween("transform", rotationTween).each("end", () => {
+            visRuleta.transition().duration(3500).attrTween("transform", rotationTween).each("end", () => {
                 // 9.1. Marcar resultado final
                 const pickedTacna = 22
                 // d3.select(".piece:nth-child(" + (elPicked + 1) + ") path")
                 d3.select(".piece:nth-child(" + pickedTacna + ") path")
-                    .attr("fill", "#000000ba")
-                    .attr("stroke", "white")
-                    .attr("stroke-width", "2");
+                    .attr("fill", "#000")
+                    .attr("stroke", "#FFBE0B")
+                    .attr("stroke-width", "5");
+                d3.select(".piece:nth-child(" + pickedTacna + ")")
+                    .style({ "transform": "scale(1.04)" })
                 // 9.2. Imprime en pantalla el resultado
                 d3.select("#ruleta_result h1").text("¡Felicidades ud. ha ganado!");
                 d3.select("#ruleta_result h2").text("Local: Tacna\nGanador: Paola Taboada");
@@ -411,6 +414,7 @@
 
                 // Animación Globos Random
                 createBalloons(30)
+                d3.select("#ruleta").style({ "transform": "scale(0.95)" })
                 // setTimeout(() => removeBalloons(), 60000)
 
                 // contentRuleta.on("click", null);
