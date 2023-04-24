@@ -141,7 +141,6 @@ body {
 /* Botón Jugar - CIRCLE */
 .circle {
   fill: white;
-  cursor: pointer;
   stroke: white;
   stroke-opacity: 0.30;
   stroke-width: 10;

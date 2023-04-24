@@ -61,7 +61,19 @@ let elPicked = 100000;
 let rotation = 0
 let oldRotation = 0;
 let oldpick = [];
+
+// TEST
+let pickedTest;
+let rotationTest;
+const dynamicData = (name = 'Tacna') => {
+    const finalRotation = data.filter((element) => element.local === name);
+    pickedTest = finalRotation[0].id - 1;
+    rotationTest = Number(finalRotation[0].rotation) + (360 * 5);
+    console.log('dynamicData', pickedTest, rotationTest);
+}
+
 const spinRuleta = (d) => {
+    dynamicData(); // Ejecuta función
     d3.select("#ruleta").style({ "transform": "scale(1)" });
 
     // Fin del sorteo
@@ -86,11 +98,10 @@ const spinRuleta = (d) => {
     }
 
     rotation += 90 - Math.round(ps / 2);
-    visRuleta.transition().duration(3500).attrTween("transform", rotationTween).each("end", () => {
+    visRuleta.transition().duration(4000).attrTween("transform", rotationTween).each("end", () => {
         // 9.1. Marcar resultado final
-        const pickedTacna = 22;
-        d3.select(".piece:nth-child(" + (elPicked + 1) + ") path").attr('class', 'piece_container_selected');
-        d3.select(".piece:nth-child(" + (elPicked + 1) + ") text").attr('class', 'piece_selected')
+        d3.select(".piece:nth-child(" + (pickedTest + 1) + ") path").attr('class', 'piece_container_selected');
+        d3.select(".piece:nth-child(" + (pickedTest + 1) + ") text").attr('class', 'piece_selected')
             .attr("transform", (d) => {
                 d.innerRadius = 0;
                 d.outerRadius = rRuleta;
@@ -99,7 +110,7 @@ const spinRuleta = (d) => {
             });
         // 9.2. Imprime en pantalla el resultado
         d3.select("#ruleta_result h1").text("¡Felicidades ud. ha ganado!");
-        d3.select("#ruleta_result h2").text("Local: " + data[elPicked].local);
+        d3.select("#ruleta_result h2").text("Local: " + data[pickedTest].local);
 
         // 9.3. Cambia el contenido del botón Spin x una imagen
         contentRuleta.append("svg:image")
@@ -125,9 +136,8 @@ const spinRuleta = (d) => {
 }
 
 const rotationTween = () => {
-    const rotationTacna = 1207;
-    // const i = d3.interpolate(0, rotationTacna);
-    const i = d3.interpolate(oldRotation % 360, rotation);
+    const i = d3.interpolate(0, rotationTest);
+    // const i = d3.interpolate(oldRotation % 360, rotationTest);
     return (t) => "rotate(" + i(t) + ")";
 }
 contentRuleta.on("click", spinRuleta);
@@ -145,7 +155,7 @@ const getRandomStyles = () => {
     const dur = random(5) + 5;
     return `
                 background-color: rgba(${r},${g},${b}, 1);
-                color: rgba(${r},${g},${b},0.7); 
+                color: rgba(${r},${g},${b},0.7);
                 box-shadow: inset -7px -3px 10px rgba(${r - 10},${g - 10},${b - 10},0.7);
                 margin: ${mt}px 0 0 ${ml}px;
                 animation: float ${dur}s ease-in infinite
@@ -335,10 +345,10 @@ const btnTryAgain = document.getElementById('try_again');
 const tryAgain = () => {
     removeBalloons()
     removeFireworks()
-    d3.select(".piece:nth-child(" + (elPicked + 1) + ") path").attr("stroke-width", "0");
-    d3.select(".piece:nth-child(" + (elPicked + 1) + ") path").classed('piece_container_selected', false);
-    d3.select(".piece:nth-child(" + (elPicked + 1) + ") text").classed('piece_not_selected', true);
-    d3.select(".piece:nth-child(" + (elPicked + 1) + ")").style({ "transform": "scale(1)" })
+    d3.select(".piece:nth-child(" + (pickedTest + 1) + ") path").attr("stroke-width", "0");
+    d3.select(".piece:nth-child(" + (pickedTest + 1) + ") path").classed('piece_container_selected', false);
+    d3.select(".piece:nth-child(" + (pickedTest + 1) + ") text").classed('piece_not_selected', true);
+    d3.select(".piece:nth-child(" + (pickedTest + 1) + ")").style({ "transform": "scale(1)" })
     d3.select("#ruleta_result h1").text("¡Mucha suerte a los participantes!");
     d3.select("#ruleta_result h2").text("");
     d3.select("#gift").remove();

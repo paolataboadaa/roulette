@@ -1,120 +1,144 @@
 export const data = [{
     "id": "1",
     "local": "Amazonas",
-    "resultado": "Participante"
+    "resultado": "Participante",
+    "rotation": "82",
 },
 {
     "id": "2",
     "local": "Ancash",
-    "resultado": "Participante"
+    "resultado": "Participante",
+    "rotation": "67",
 },
 {
     "id": "3",
     "local": "Apurímac",
-    "resultado": "Participante"
+    "resultado": "Participante",
+    "rotation": "52",
 },
 {
     "id": "4",
     "local": "Arequipa",
-    "resultado": "Participante"
+    "resultado": "Participante",
+    "rotation": "37",
 },
 {
     "id": "5",
     "local": "Ayacucho",
-    "resultado": "Participante"
+    "resultado": "Participante",
+    "rotation": "22",
 },
 {
     "id": "6",
     "local": "Cajamarca",
-    "resultado": "Participante"
+    "resultado": "Participante",
+    "rotation": "7",
 },
 {
     "id": "7",
     "local": "Callao",
-    "resultado": "Participante"
+    "resultado": "Participante",
+    "rotation": "352",
 },
 {
     "id": "8",
     "local": "Cusco",
-    "resultado": "Participante"
+    "resultado": "Participante",
+    "rotation": "337",
 },
 {
     "id": "9",
     "local": "Huánuco",
-    "resultado": "Participante"
+    "resultado": "Participante",
+    "rotation": "322",
 },
 {
     "id": "10",
     "local": "Ica",
-    "resultado": "Participante"
+    "resultado": "Participante",
+    "rotation": "307",
 },
 {
     "id": "11",
     "local": "Junín",
-    "resultado": "Participante"
+    "resultado": "Participante",
+    "rotation": "292",
 },
 {
     "id": "12",
     "local": "La Libertad",
-    "resultado": "Participante"
+    "resultado": "Participante",
+    "rotation": "277",
 },
 {
     "id": "13",
     "local": "Lambayeque",
-    "resultado": "Participante"
+    "resultado": "Participante",
+    "rotation": "262",
 },
 {
     "id": "14",
     "local": "Lima",
-    "resultado": "Participante"
+    "resultado": "Participante",
+    "rotation": "247",
 },
 {
     "id": "15",
     "local": "Loreto",
-    "resultado": "Participante"
+    "resultado": "Participante",
+    "rotation": "232",
 },
 {
     "id": "16",
     "local": "Madre de Dios",
-    "resultado": "Participante"
+    "resultado": "Participante",
+    "rotation": "217",
 },
 {
     "id": "17",
     "local": "Moquegua",
-    "resultado": "Participante"
+    "resultado": "Participante",
+    "rotation": "202",
 },
 {
     "id": "18",
     "local": "Pasco",
-    "resultado": "Participante"
+    "resultado": "Participante",
+    "rotation": "187",
 },
 {
     "id": "19",
     "local": "Piura",
-    "resultado": "Participante"
+    "resultado": "Participante",
+    "rotation": "172",
 },
 {
     "id": "20",
     "local": "Puno",
-    "resultado": "Participante"
+    "resultado": "Participante",
+    "rotation": "157",
 },
 {
     "id": "21",
     "local": "San Martín",
-    "resultado": "Participante"
+    "resultado": "Participante",
+    "rotation": "142",
 },
 {
     "id": "22",
     "local": "Tacna",
-    "resultado": "Ganador"
+    "resultado": "Ganador",
+    "rotation": "127",
 },
 {
     "id": "23",
     "local": "Tumbes",
-    "resultado": "Participante"
+    "resultado": "Participante",
+    "rotation": "112",
 },
 {
     "id": "24",
     "local": "Ucayali",
-    "resultado": "Participante"
+    "resultado": "Participante",
+    "rotation": "97",
 }];
