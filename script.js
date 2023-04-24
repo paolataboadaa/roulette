@@ -108,8 +108,7 @@ const spinRuleta = (d) => {
             .attr("width", whScreen * 0.09)
             .attr("height", whScreen * 0.09)
             .attr("x", whScreen * -0.09 / 2)
-            .attr("y", whScreen * -0.09 / 2)
-            .style({ "cursor": "pointer" });
+            .attr("y", whScreen * -0.09 / 2);
         d3.select("#text_jugar").style({ "display": "none" }); // Oculta el texto del botón Spin
 
         // Efecto Fireworks
@@ -121,7 +120,7 @@ const spinRuleta = (d) => {
 
         d3.select("#ruleta").style({ "transform": "scale(0.95)" })
         oldRotation = rotation;
-        // contentRuleta.on("click", null);
+        contentRuleta.on("click", null);
     });
 }
 
@@ -344,5 +343,6 @@ const tryAgain = () => {
     d3.select("#ruleta_result h2").text("");
     d3.select("#gift").remove();
     d3.select("#text_jugar").style({ "display": "block" });
+    contentRuleta.on("click", spinRuleta);
 }
 btnTryAgain.addEventListener('click', tryAgain);

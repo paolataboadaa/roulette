@@ -106,7 +106,7 @@ export const data = [{
 {
     "id": "22",
     "local": "Tacna",
-    "resultado": "\nGanador(a)\nPaola Taboada"
+    "resultado": "Ganador"
 },
 {
     "id": "23",
