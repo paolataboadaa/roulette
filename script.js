@@ -2,7 +2,6 @@ import { data } from './data.js'
 
 // RULETA
 const colors = d3.scale.ordinal().range(["#000000", "#006BBB", "#E20715"]);
-const oldrotation = 0;
 
 // 1. Agrega el elemento SVG
 const paddingRuleta = { top: 0, right: 20, bottom: 0, left: 20 };
@@ -17,8 +16,7 @@ const svgRuleta = d3.select('#ruleta').append("svg").data([data])
     .attr("width", whScreen).attr("height", whScreen).style({ "display": "block", "margin-left": "auto" });
 
 // 2. Agrega el contenido (piezas) de la ruleta
-const contentRuleta = svgRuleta.append("g").attr('id', 'content')
-    .attr("transform", "translate(" + (wRuleta / 2) + "," + (hRuleta / 2) + ")");
+const contentRuleta = svgRuleta.append("g").attr('id', 'content').attr("transform", "translate(" + (wRuleta / 2) + "," + (hRuleta / 2) + ")");
 const visRuleta = contentRuleta.append("g").attr('id', 'vis');
 
 // 3. Agrega el gráfico de torta
@@ -28,7 +26,7 @@ const arcRuleta = d3.svg.arc().outerRadius(rRuleta);
 const arcsRuleta = visRuleta.selectAll("g.piece").data(pieRuleta).enter().append("g").attr("class", "piece");
 arcsRuleta.append("path").attr("fill", (d, i) => colors(i)).attr("d", (d) => arcRuleta(d));
 
-// 4. Borde blanco de la ruleta
+// 4. Borde amarillo de la ruleta
 const borderWidth = whScreen * 0.025;
 const outerRadiusRuleta = Math.min(wRuleta, hRuleta) / 2 - borderWidth;
 const arcBorderRuleta = d3.svg.arc().innerRadius(outerRadiusRuleta).outerRadius(outerRadiusRuleta + borderWidth);
@@ -36,15 +34,14 @@ arcsRuleta.append("path").attr("fill", "#FFBE0B").attr("d", arcBorderRuleta);
 
 // 5. Agrega el texto de los departamentos
 arcsRuleta.append("text").attr("transform", (d) => {
-    console.log('data', d);
     d.innerRadius = 0;
     d.outerRadius = rRuleta;
     d.angle = (d.startAngle + d.endAngle) / 2;
     return "rotate(" + ((d.angle * 180 / Math.PI - 90) + 2) + ")translate(" + (d.outerRadius - (borderWidth + 25)) + ")";
 })
     .attr("text-anchor", "end")
-    .text((d, i) => data[i].local)
-    .style({ "fill": "white", "font-size": "calc(1rem + 0.5vw)", "font-weight": "bold" });
+    .attr("class", "piece_not_selected")
+    .text((d, i) => data[i].local);
 
 // 6. Flecha indicador Ganador
 svgRuleta.append("g")
@@ -54,43 +51,33 @@ svgRuleta.append("g")
     .style({ "fill": "#515AA4" });
 
 // 7. Botón Spin Jugar
-contentRuleta.append("circle").attr("cx", 0).attr("cy", 0).attr("r", whScreen * 0.09)
-    .style({
-        "fill": "white",
-        "cursor": "pointer",
-        "stroke": "white",
-        "stroke-opacity": "0.30",
-        "stroke-width": "10",
-    });
+contentRuleta.append("circle").attr("cx", 0).attr("cy", 0).attr("r", whScreen * 0.09).attr("class", "circle");
 
 // 8. Texto Spin Jugar
-contentRuleta.append("text").attr("id", "text").attr("x", 0).attr("y", 10).attr("text-anchor", "middle")
-    .text("Jugar").style({ "font-weight": "bold", "font-size": "calc(1rem + 0.65vw)", "cursor": "pointer", "text-transform": "uppercase" });
+contentRuleta.append("text").attr("id", "text_jugar").attr("x", 0).attr("y", whScreen * 0.025 / 2).attr("text-anchor", "middle").text("Jugar");
 
 // 9. Función Spin para girar la ruleta
 let elPicked = 100000;
-let rotationRuleta = 0
+let rotation = 0
+let oldRotation = 0;
 let oldpick = [];
 const spinRuleta = (d) => {
-    d3.select("#ruleta").style({ "transform": "scale(1)" })
-    d3.select("#image").remove(); // Elimina la imagen del botón Spin
-    d3.select("#text").style({ "fill": "black" }); // Muestra el texto del botón Spin
+    d3.select("#ruleta").style({ "transform": "scale(1)" });
 
-    // contentRuleta.on("click", null);
-    // all slices have been seen, all done
-    // console.log("OldPick: " + oldpick.length, "Data length: " + data.length);
+    // Fin del sorteo
     if (oldpick.length == data.length) {
-        console.log("done");
+        console.log("Fin, no quedan más opciones...");
         contentRuleta.on("click", null);
         return;
     }
 
     const ps = 360 / data.length;
     const range = Math.floor((Math.random() * 1440) + 360);
-    rotationRuleta = (Math.round(range / ps) * ps);
-    elPicked = Math.round(data.length - (rotationRuleta % 360) / ps);
+    rotation = (Math.round(range / ps) * ps);
+    elPicked = Math.round(data.length - (rotation % 360) / ps);
     elPicked = elPicked >= data.length ? (elPicked % data.length) : elPicked;
 
+    // Guarda sorteo para que no se repita
     if (oldpick.indexOf(elPicked) !== -1) {
         d3.select(this).call(spinRuleta);
         return;
@@ -98,42 +85,32 @@ const spinRuleta = (d) => {
         oldpick.push(elPicked);
     }
 
-    rotationRuleta += 90 - Math.round(ps / 2);
-    visRuleta.transition().duration(4000).attrTween("transform", rotationTween).each("end", () => {
+    rotation += 90 - Math.round(ps / 2);
+    visRuleta.transition().duration(3500).attrTween("transform", rotationTween).each("end", () => {
         // 9.1. Marcar resultado final
-        // const pickedTacna = 22
-        d3.select(".piece:nth-child(" + (elPicked + 1) + ") path")
-            // d3.select(".piece:nth-child(" + pickedTacna + ") path")
-            .attr("fill", "#FFBE0B")
-            .attr("stroke", "#FFBE0B")
-            .attr("stroke-width", "5");
-        d3.select(".piece:nth-child(" + (elPicked + 1) + ") text")
-            .style({ "fill": "black", "font-size": "calc(1rem + 0.8vw)" })
+        const pickedTacna = 22;
+        d3.select(".piece:nth-child(" + (elPicked + 1) + ") path").attr('class', 'piece_container_selected');
+        d3.select(".piece:nth-child(" + (elPicked + 1) + ") text").attr('class', 'piece_selected')
             .attr("transform", (d) => {
-                console.log('data', d);
                 d.innerRadius = 0;
                 d.outerRadius = rRuleta;
                 d.angle = (d.startAngle + d.endAngle) / 2;
                 return "rotate(" + ((d.angle * 180 / Math.PI - 90) + 2) + ")translate(" + (d.outerRadius - (borderWidth + (whScreen * 0.05))) + ")";
             });
-        // d3.select(".piece:nth-child(" + pickedTacna + ")").style({ "transform": "scale(1.04)" })
-        d3.select(".piece:nth-child(" + (elPicked + 1) + ")").style({ "transform": "scale(1.04)" })
         // 9.2. Imprime en pantalla el resultado
         d3.select("#ruleta_result h1").text("¡Felicidades ud. ha ganado!");
-        // d3.select("#ruleta_result h2").text("Local: Tacna\nGanador: Paola Taboada");
         d3.select("#ruleta_result h2").text("Local: " + data[elPicked].local);
-        console.log(data[elPicked].resultado == "Participante" ? "Participante" : "Ganador");
 
         // 9.3. Cambia el contenido del botón Spin x una imagen
         contentRuleta.append("svg:image")
-            .attr("id", "image")
+            .attr("id", "gift")
             .attr("xlink:href", "gift.svg")
             .attr("width", whScreen * 0.09)
             .attr("height", whScreen * 0.09)
             .attr("x", whScreen * -0.09 / 2)
             .attr("y", whScreen * -0.09 / 2)
             .style({ "cursor": "pointer" });
-        d3.select("#text").style({ "fill": "white" }); // Oculta el texto del botón Spin
+        d3.select("#text_jugar").style({ "display": "none" }); // Oculta el texto del botón Spin
 
         // Efecto Fireworks
         playFireworks()
@@ -143,15 +120,15 @@ const spinRuleta = (d) => {
         createBalloons(30)
 
         d3.select("#ruleta").style({ "transform": "scale(0.95)" })
+        oldRotation = rotation;
         // contentRuleta.on("click", null);
     });
 }
 
 const rotationTween = () => {
-    const rotationTacna = 1207
-    console.log(rotationTacna % 360, oldrotation, rotationRuleta);
+    const rotationTacna = 1207;
     // const i = d3.interpolate(0, rotationTacna);
-    const i = d3.interpolate(rotationTacna % 360, rotationRuleta);
+    const i = d3.interpolate(oldRotation % 360, rotation);
     return (t) => "rotate(" + i(t) + ")";
 }
 contentRuleta.on("click", spinRuleta);
@@ -177,8 +154,6 @@ const getRandomStyles = () => {
 }
 
 const createBalloons = (num) => {
-    console.log(balloonContainer);
-    console.log(document.getElementById('balloon_wrapper'));
     !balloonContainer && document.createElement("div").id('balloon_container');
     for (let i = num; i > 0; i--) {
         const balloon = document.createElement("div");
@@ -191,11 +166,9 @@ const createBalloons = (num) => {
 
 const removeBalloons = () => {
     balloonContainer.style.opacity = 0;
-    setTimeout(() => {
-        // balloonContainer.remove()
-        d3.select('#balloon_container').remove()
-    }, 500)
+    balloonContainer.textContent = '';
 }
+
 
 // Efecto fireworks
 const playFireworks = async () => {
@@ -345,6 +318,10 @@ const playFireworks = async () => {
     });
 }
 
+const removeFireworks = () => {
+    d3.select('#tsparticles').remove()
+}
+
 // Animación Confetti
 const showConfetti = () => {
     party.confetti(document.querySelector("#ruleta"), {
@@ -356,14 +333,16 @@ const showConfetti = () => {
 
 // Reiniciar Ruleta
 const btnTryAgain = document.getElementById('try_again');
-const partyConfetti = document.getElementById('tsparticles');
 const tryAgain = () => {
     removeBalloons()
-    d3.select('#tsparticles').remove()
+    removeFireworks()
     d3.select(".piece:nth-child(" + (elPicked + 1) + ") path").attr("stroke-width", "0");
-    d3.select(".piece:nth-child(" + (elPicked + 1) + ") text").style({ "fill": "black", "font-size": "calc(1rem + 0.5vw)" });
+    d3.select(".piece:nth-child(" + (elPicked + 1) + ") path").classed('piece_container_selected', false);
+    d3.select(".piece:nth-child(" + (elPicked + 1) + ") text").classed('piece_not_selected', true);
     d3.select(".piece:nth-child(" + (elPicked + 1) + ")").style({ "transform": "scale(1)" })
     d3.select("#ruleta_result h1").text("¡Mucha suerte a los participantes!");
     d3.select("#ruleta_result h2").text("");
+    d3.select("#gift").remove();
+    d3.select("#text_jugar").style({ "display": "block" });
 }
-btnTryAgain.addEventListener('click', tryAgain)
+btnTryAgain.addEventListener('click', tryAgain);
