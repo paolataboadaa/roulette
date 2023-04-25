@@ -2,9 +2,10 @@ import { data } from './data.js'
 
 // RULETA
 const colors = d3.scale.ordinal().range(["#000000", "#006BBB", "#E20715"]);
+const isDesktopS = document.body.clientWidth < 2000;
 
 // 1. Agrega el elemento SVG
-const paddingRuleta = { top: 0, right: 20, bottom: 0, left: 20 };
+const paddingRuleta = { top: 0, right: 20, bottom: 0, left: isDesktopS ? 0 : 20 };
 const heightScreen = document.querySelector("#ruleta").clientHeight - 25;
 const widthScreen = document.querySelector("#ruleta").clientWidth - 25;
 const whScreen = Math.min(widthScreen, heightScreen);
@@ -73,7 +74,7 @@ const dynamicData = (name = 'Tacna') => {
 }
 
 const spinRuleta = (d) => {
-    dynamicData(); // Ejecuta función
+    dynamicData('Lima'); // Ejecuta función
     d3.select("#ruleta").style({ "transform": "scale(1)" });
 
     // Fin del sorteo
