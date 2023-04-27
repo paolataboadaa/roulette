@@ -42,7 +42,7 @@ arcsRuleta.append("text").attr("transform", (d) => {
 })
     .attr("text-anchor", "end")
     .attr("class", "piece_not_selected")
-    .text((d, i) => data[i].local);
+    .text((d, i) => data[i].departamento);
 
 // 6. Flecha indicador Ganador
 svgRuleta.append("g")
@@ -67,7 +67,7 @@ let oldpick = [];
 let pickedTest;
 let rotationTest;
 const dynamicData = (name = 'Tacna') => {
-    const finalRotation = data.filter((element) => element.local === name);
+    const finalRotation = data.filter((element) => element.departamento === name);
     pickedTest = finalRotation[0].id - 1;
     rotationTest = Number(finalRotation[0].rotation) + (360 * 5);
     console.log('dynamicData', pickedTest, rotationTest);
@@ -110,13 +110,14 @@ const spinRuleta = (d) => {
                 return "rotate(" + ((d.angle * 180 / Math.PI - 90) + 2) + ")translate(" + (d.outerRadius - (borderWidth + (whScreen * 0.05))) + ")";
             });
         // 9.2. Imprime en pantalla el resultado
-        d3.select("#ruleta_result h1").text("¡Felicidades ud. ha ganado!");
-        d3.select("#ruleta_result h2").text("Local: " + data[pickedTest].local);
+        d3.select("#ruleta_result h1").text("¡Felicidades " + data[pickedTest].participante + "!");
+        d3.select("#ruleta_result h3").text(data[pickedTest].agente);
+        d3.select("#ruleta_result h2").text("Departamento de " + data[pickedTest].departamento);
 
         // 9.3. Cambia el contenido del botón Spin x una imagen
         contentRuleta.append("svg:image")
             .attr("id", "gift")
-            .attr("xlink:href", "gift.svg")
+            .attr("xlink:href", "./assets/AT-logo.svg")
             .attr("width", whScreen * 0.09)
             .attr("height", whScreen * 0.09)
             .attr("x", whScreen * -0.09 / 2)
