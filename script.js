@@ -352,6 +352,7 @@ const tryAgain = () => {
     d3.select(".piece:nth-child(" + (pickedTest + 1) + ") text").classed('piece_not_selected', true);
     d3.select(".piece:nth-child(" + (pickedTest + 1) + ")").style({ "transform": "scale(1)" })
     d3.select("#ruleta_result h1").text("¡Mucha suerte a los participantes!");
+    d3.select("#ruleta_result h3").text("");
     d3.select("#ruleta_result h2").text("");
     d3.select("#gift").remove();
     d3.select("#text_jugar").style({ "display": "block" });
