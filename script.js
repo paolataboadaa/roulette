@@ -69,7 +69,7 @@ let rotationTest;
 const dynamicData = (name = 'Tacna') => {
     const finalRotation = data.filter((element) => element.departamento === name);
     pickedTest = finalRotation[0].id - 1;
-    rotationTest = Number(finalRotation[0].rotation) + (360 * 5);
+    rotationTest = Number(finalRotation[0].rotation) + (360 * 25);
     console.log('dynamicData', pickedTest, rotationTest);
 }
 
@@ -99,7 +99,7 @@ const spinRuleta = (d) => {
     }
 
     rotation += 90 - Math.round(ps / 2);
-    visRuleta.transition().duration(4000).attrTween("transform", rotationTween).each("end", () => {
+    visRuleta.transition().duration(30000).ease('quad-out').attrTween("transform", rotationTween).each("end", () => {
         // 9.1. Marcar resultado final
         d3.select(".piece:nth-child(" + (pickedTest + 1) + ") path").attr('class', 'piece_container_selected');
         d3.select(".piece:nth-child(" + (pickedTest + 1) + ") text").attr('class', 'piece_selected')

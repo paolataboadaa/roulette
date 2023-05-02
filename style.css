@@ -233,7 +233,7 @@ body {
 
 @media (max-width: 1080px) {
   .ruleta_container {
-    height: 100%;
+    /* height: 100%; */
     padding-inline: 0;
   }
 
